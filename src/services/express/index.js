@@ -1,19 +1,19 @@
-import express from "express";
-import forceSSL from "express-force-ssl";
-import cors from "cors";
-import compression from "compression";
-import morgan from "morgan";
-import bodyParser from "body-parser";
-import { errorHandler as queryErrorHandler } from "querymen";
-import { errorHandler as bodyErrorHandler } from "bodymen";
-import { env } from "../../config";
+import express from 'express';
+import forceSSL from 'express-force-ssl';
+import cors from 'cors';
+import compression from 'compression';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import { errorHandler as queryErrorHandler } from 'querymen';
+import { errorHandler as bodyErrorHandler } from 'bodymen';
+import { env } from '../../config';
 
 export default (apiRoot, routes) => {
   const app = express();
 
   /* istanbul ignore next */
-  if (env === "production") {
-    app.set("forceSSLOptions", {
+  if (env === 'production') {
+    app.set('forceSSLOptions', {
       enable301Redirects: false,
       trustXFPHeader: true,
     });
@@ -21,18 +21,20 @@ export default (apiRoot, routes) => {
   }
 
   /* istanbul ignore next */
-  if (env === "production" || env === "development") {
+  if (env === 'production' || env === 'development') {
+    app.use(compression());
+    app.use(morgan('dev'));
+  }
+  if (env === 'production') {
     app.use(
       cors({
-        origin: "http://localhost:8080",
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
+        origin: 'https://eatos.herokuapp.com',
       })
     );
-    app.use(compression());
-    app.use(morgan("dev"));
+  } else {
+    app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
   }
-
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(apiRoot, routes);
