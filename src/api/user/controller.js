@@ -29,7 +29,7 @@ export const showMe = ({ user }, res) => {
 
 export const register = async ({ body }, res) => {
   try {
-    const user = body;
+    const user = body.user;
     user.password = await genHash(user.password);
     const userInfo = await User.create(user);
     await Wallets.create({ amount: 0, user: userInfo.id });
