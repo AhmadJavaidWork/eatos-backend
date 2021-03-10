@@ -10,6 +10,9 @@ const userBillsSchema = new Schema(
     userId: {
       type: String,
     },
+    billId: {
+      type: String,
+    },
     amount: {
       type: Number,
     },

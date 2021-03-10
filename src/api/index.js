@@ -5,6 +5,7 @@ import user from './user';
 import auth from './auth';
 import wallets from './wallets';
 import userBills from './userBills';
+import bills from './bills';
 
 const router = new Router();
 
@@ -13,5 +14,6 @@ router.use('/users', user);
 router.use('/auth', auth);
 router.use('/wallets', wallets);
 router.use('/user-bills', token({ required: true }), userBills);
+router.use('/bills', token({ required: true }), bills);
 
 export default router;

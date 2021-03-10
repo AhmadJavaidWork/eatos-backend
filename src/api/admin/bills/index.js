@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { create, getAll } from './controller';
+import { create, getAll, getById, update } from './controller';
 
 const router = new Router();
 
 router.post('/', create);
 router.get('/', getAll);
+router.get('/:id', getById);
+router.put('/:id', update);
 
 // router.get('/',
 //   token({ required: true }),
