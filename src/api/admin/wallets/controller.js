@@ -1,5 +1,6 @@
 import Wallet from '../../wallets/model';
 import User from '../../user/model';
+import { create } from '../payments/controller';
 
 export const getAll = async (req, res) => {
   try {
@@ -21,6 +22,7 @@ export const update = async ({ body, params }, res) => {
     const amount = body.amount;
     const id = params.id;
     await Wallet.findOneAndUpdate({ user: id }, { $inc: { amount } });
+    await create(amount, id);
     const wallet = await Wallet.findOne({ user: id });
     return res.json({ wallet });
   } catch (error) {

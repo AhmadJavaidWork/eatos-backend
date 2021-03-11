@@ -33,7 +33,6 @@ export const register = async ({ body }, res) => {
     user.password = await genHash(user.password);
     const userInfo = await User.create(user);
     await Wallets.create({ amount: 0, user: userInfo.id });
-
     const access_token = await sign(userTokenView(userInfo));
     return res.json({ user: userInfo.view(), access_token });
   } catch (error) {
