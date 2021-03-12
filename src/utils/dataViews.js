@@ -1,14 +1,14 @@
 export const userView = (user) => {
   user = {
-    id: user._id,
+    id: user.id,
     name: user.name,
     email: user.email,
     role: user.role,
     gender: user.gender,
     picture: user.picture,
     phone: user.phone,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
+    createdAt: user.created_at,
+    updatedAt: user.updated_at,
   };
   return user;
 };

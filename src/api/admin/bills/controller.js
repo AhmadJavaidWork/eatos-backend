@@ -1,14 +1,9 @@
-import Bills from './model';
-import { deductBill } from '../wallets/controller';
-import { addUserBills, updateUserBills } from '../../userBills/controller';
+import queries from './queries';
 
-export const create = async ({ user, body }, res) => {
+export const addBill = async ({ user, body }, res) => {
   try {
-    var billInfo = await Bills.create({ ...body, user });
-    billInfo = billInfo.view();
-    deductBill(body.participentsInfo);
-    addUserBills(body.participentsInfo, billInfo.id, user);
-    return res.json({ billInfo });
+    const bill = await queries.addBill(body, user.id);
+    return res.json({ bill });
   } catch (error) {
     console.log('\n\nERROR ========>', error, '\n\n');
     return res.json({ error });
@@ -17,7 +12,7 @@ export const create = async ({ user, body }, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const allBills = await Bills.find({});
+    const allBills = await queries.getAll();
     return res.json({ allBills });
   } catch (error) {
     console.log('\n\nERROR ========>', error, '\n\n');
@@ -27,36 +22,18 @@ export const getAll = async (req, res) => {
 
 export const getById = async ({ params }, res) => {
   try {
-    const bills = await Bills.findById(params.id);
-    return res.json({ bills });
+    const bill = await queries.getById(params.id);
+    return res.json({ bill });
   } catch (error) {
     console.log('\n\nERROR ========>', error, '\n\n');
     return res.json({ error });
   }
 };
 
-export const update = async ({ user, body, params }, res) => {
+export const update = async ({ body, params }, res) => {
   try {
-    var billInfo = await Bills.findByIdAndUpdate(params.id, body);
-    billInfo = billInfo.view();
-    const oldUserBills = await updateUserBills(
-      body.participentsInfo,
-      billInfo.id,
-      user
-    );
-    const participentsInfo = [];
-    for (var i = 0; i < oldUserBills.length; i++) {
-      for (var j = 0; j < body.participentsInfo.length; j++) {
-        if (oldUserBills[i].userId === body.participentsInfo[j].userId) {
-          participentsInfo.push({
-            userId: oldUserBills[i].userId,
-            amount: body.participentsInfo[j].amount - oldUserBills[i].amount,
-          });
-        }
-      }
-    }
-    deductBill(participentsInfo);
-    return res.json({ billInfo });
+    const bill = await queries.update(body, params.id);
+    return res.json({ bill });
   } catch (error) {
     console.log('\n\nERROR ========>', error, '\n\n');
     return res.json({ error });

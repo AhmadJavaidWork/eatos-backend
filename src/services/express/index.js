@@ -7,11 +7,15 @@ import bodyParser from 'body-parser';
 import { errorHandler as queryErrorHandler } from 'querymen';
 import { errorHandler as bodyErrorHandler } from 'bodymen';
 import { env } from '../../config';
+import passport from 'passport';
+import knex from '../knex';
 
 export default (apiRoot, routes) => {
   const app = express();
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use('db', knex);
 
-  /* istanbul ignore next */
   if (env === 'production') {
     app.set('forceSSLOptions', {
       enable301Redirects: false,

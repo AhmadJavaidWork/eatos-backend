@@ -1,8 +1,8 @@
-import Payments from '../admin/payments/model';
+import queries from './queries';
 
-export const getAllByUserId = async ({ user }, res) => {
+export const getAll = async ({ user }, res) => {
   try {
-    const payments = await Payments.find({ userId: user.id });
+    const payments = await queries.getAll(user.id);
     return res.json({ payments });
   } catch (error) {
     console.log('\n\nERROR ========>', error, '\n\n');
