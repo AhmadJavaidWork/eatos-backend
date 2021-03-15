@@ -5,7 +5,7 @@ require('dotenv').config({
 if (process.env.NODE_ENV === 'production') {
   module.exports = {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
+    connection: process.env.DATABASE_URL,
   };
 } else {
   module.exports = {
