@@ -28,7 +28,16 @@ const getById = async (id) => {
   const bill = await knex('bills')
     .where({ id })
     .then((bill) => bill[0]);
-  bill.userBills = await knex('userbills').where({ billId: id });
+  bill.userBills = await knex({ userbills: 'userbills' })
+    .select(
+      'users.name',
+      'userbills.userId',
+      'userbills.amount',
+      'userbills.chapati',
+      'userbills.salan'
+    )
+    .leftOuterJoin({ users: 'users' }, 'userbills.userId', '=', 'users.id')
+    .where({ billId: id });
   return bill;
 };
 
