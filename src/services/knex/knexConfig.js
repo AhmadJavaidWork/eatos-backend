@@ -1,7 +1,9 @@
 if (process.env.NODE_ENV === 'production') {
   module.exports = {
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
+    production: {
+      client: 'pg',
+      connection: process.env.DATABASE_URL,
+    },
   };
 } else {
   require('dotenv').config({
